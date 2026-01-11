@@ -119,18 +119,18 @@
 
 ```json
 {
-  "statusCode": 201
-  file: {
-    id: 1,
-    name: "file.txt",
-    tags: {
-      count: 3,
-      data: [
+  "statusCode": 201,
+  "file": {
+    "id": 1,
+    "name": "file.txt",
+    "tags": {
+      "count": 3,
+      "data": [
         ...
       ]
     },
-    download: "",
-    miniature: ""
+    "download": "",
+    "miniature": ""
   }
 }
 ```
@@ -141,13 +141,13 @@
 
 ```json
   {
-    tags: [
-      count: 3,
-      data: [
+    "tags": {
+      "count": 3,
+      "data": [
         ...
       ]
-    ],
-    name: "",
+    },
+    "name": "",
   }
 ```
 
@@ -161,20 +161,16 @@ tags это массив id тэгов
 
 ```json
 {
-  "statusCode": 201
-  file: {
-    id: 1,
-    name: "file.txt",
-    tags: {
-      count: 3,
-      data: [
-        1,
-        2,
-        3
-      ]
+  "statusCode": 201,
+  "file": {
+    "id": 1,
+    "name": "file.txt",
+    "tags": {
+      "count": 3,
+      "data": [1, 2, 3]
     },
-    download: "",
-    miniature: ""
+    "download": "",
+    "miniature": ""
   }
 }
 ```
@@ -191,11 +187,11 @@ tags это массив id тэгов
 {
   "statusCode": 200,
   "file": {
-    id: 1,
-    name: "",
-    tags: [
-      count: 3,
-      data: [
+    "id": 1,
+    "name": "",
+    "tags": {
+      "count": 3,
+      "data": [
         {
           "id": 1,
           "name": "",
@@ -203,8 +199,8 @@ tags это массив id тэгов
         },
         ...
       ]
-    ],
-    size: 10000
+    },
+    "size": 10000
   }
 }
 ```
@@ -242,11 +238,11 @@ tags это массив id тэгов
 
 ```json
 {
-  statusCode: 200,
-  tag: {
-    id: 1,
-    name: "",
-    color: ""
+  "statusCode": 200,
+  "tag": {
+    "id": 1,
+    "name": "",
+    "color": ""
   }
 }
 ```
@@ -295,6 +291,21 @@ tags это массив id тэгов
 {
   "statusCode": 200,
   "jwtToken": ""
+}
+```
+
+### Ошибка
+
+В случае ошибки возвращает объект типа :
+
+```json
+{
+  "statusCode": 400,
+  "reason": {
+    "ru": "",
+    "en": ""
+  },
+  "data": {}
 }
 ```
 
