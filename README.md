@@ -322,13 +322,21 @@ tags это массив id тэгов
 ### .env
 
 ROOT_PASS пароль рута
+
 PORT порт приложения
+
 DATABASE_URL упл подключения к бд
 
 По-умолчанию
 
 ```bash
-DATABASE_URL="postgres://USER:PASSWORD@db.prisma.io:5432/?sslmode=require"
+DATABASE_URL="postgres://root:root@postgresql:5432/?sslmode=require"
+```
+
+postgresql должен быть перед этим определен в /etc/hosts
+
+```/etc/hosts
+127.0.0.1 postgresql
 ```
 
 ## License
