@@ -1,16 +1,22 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import { AppModule } from './app.module';
+} from "@nestjs/platform-fastify";
+import { AppModule } from "./app.module";
+import { ConsoleLogger } from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter()
+    new FastifyAdapter({ logger: true }),
+    {
+      logger: new ConsoleLogger({
+        json: true,
+      }),
+    }
   );
-  app.setGlobalPrefix('v1');
+  app.setGlobalPrefix("v1");
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
