@@ -12,8 +12,8 @@
   docker start cvefuck-backend
 ```
 
-Для работы также понадобится контейнер с Postgresql (v. 16)
-Он должен быть создан и запущен до запуска контейнера cvefuck-backend
+Для работы также понадобится контейнер с Postgresql (v. 16) и контейнер с Redis (v. 8.4)
+Они должены быть созданы и запущены до запуска контейнера cvefuck-backend
 
 ## Описание API
 
@@ -318,6 +318,18 @@ tags это массив id тэгов
 На авторизацию 5
 
 Для /users/verify выключен
+
+### .env
+
+ROOT_PASS пароль рута
+PORT порт приложения
+DATABASE_URL упл подключения к бд
+
+По-умолчанию
+
+```bash
+DATABASE_URL="postgres://USER:PASSWORD@db.prisma.io:5432/?sslmode=require"
+```
 
 ## License
 
