@@ -1,98 +1,303 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# CVEFUCK-backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Бекенд-приложение, написанное на Nest.js
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Установка
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+Для установки выполнить следующие команды
 
 ```bash
-$ yarn install
+  docker build -t cvefuck-backend
+  docker create --name cvefuck-backend -p 3000:3000 cvefuck-backend
+  docker start cvefuck-backend
 ```
 
-## Compile and run the project
+Для работы также понадобится контейнер с Postgresql (v. 16)
+Он должен быть создан и запущен до запуска контейнера cvefuck-backend
 
-```bash
-# development
-$ yarn run start
+## Описание API
 
-# watch mode
-$ yarn run start:dev
+### /cves GET
 
-# production mode
-$ yarn run start:prod
+Вернет в случае успеха объект типа :
+
+```json
+{
+  "statusCode": 200,
+  "cves": {
+    "count": 15,
+    "data": [
+      {
+        "id": "CVE-2025-15418",
+        "published": "2026-01-02T00:15:43.047",
+        "description": {
+          "en": "A security flaw has been discovered in Open5GS up to 2.7.6. ...",
+          "ru": "Google-Translate"
+        },
+        "baseScore": {
+          "cvssMetricV40": 4.8,
+          "cvssMetricV31": 3.3,
+          "cvssMetricV2": 1.7
+        },
+        "references": {
+          "count": 3,
+          "data": [
+            "https://github.com/open5gs/open5gs/commit/4e913d21f2c032b187815f063dbab5ebe65fe83a",
+            "https://github.com/open5gs/open5gs/issues/4217#issue-3759615968"
+          ]
+        }
+      }
+    ]
+  }
+}
 ```
 
-## Run tests
+Массив cves содержит уязвимости за сегодняшний день
 
-```bash
-# unit tests
-$ yarn run test
+Можно передать в route-параметре число N можно получить список уязвимости за последние N дней
+Например :
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```Вернет информацию за последние 7 дней
+  /cves/7
 ```
 
-## Deployment
+Некоторые поля "baseScrore" могут быть undefined
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### /files GET
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Получить список файлов
+В случае успеха вернет объект типа :
 
-```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+```json
+{
+  "statusCode": 200,
+  "files": {
+    "sort": {
+      "page": 1,
+      "size": 20,
+      "order": {
+        "id": "asc"
+      },
+      "tags": {
+        "count": 3,
+        "data": [
+          {
+            "id": 5,
+            "name": "PDF",
+            "color": "#1100ffff"
+          },
+          {
+            "id": 6,
+            "name": "LEAK",
+            "color": "#3eff38ff"
+          },
+          ...
+        ]
+      }
+    },
+    "count": 20,
+    "data": [
+      {
+        "id": 1,
+        "name": "file.txt",
+        "size": 10000,
+        "download": "http://...",
+        "miniature": "http://..."
+      },
+      ...
+    ]
+  }
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Параметры tags, size, page, order указываются в query
 
-## Resources
+### /files POST
 
-Check out a few resources that may come in handy when working with NestJS:
+Загрузит файл на диск и впишет его в базу
+В случае успеха вернет 201 и объект типа :
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```json
+{
+  "statusCode": 201
+  file: {
+    id: 1,
+    name: "file.txt",
+    tags: {
+      count: 3,
+      data: [
+        ...
+      ]
+    },
+    download: "",
+    miniature: ""
+  }
+}
+```
 
-## Support
+### /files PUT
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Примет в Body :
 
-## Stay in touch
+```json
+  {
+    tags: [
+      count: 3,
+      data: [
+        ...
+      ]
+    ],
+    name: "",
+  }
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Если не указать ни одного поля будет возвращено 400
+
+Указанная информация будет перезаписана
+
+tags это массив id тэгов
+
+Вернет 200 и объект типа :
+
+```json
+{
+  "statusCode": 201
+  file: {
+    id: 1,
+    name: "file.txt",
+    tags: {
+      count: 3,
+      data: [
+        1,
+        2,
+        3
+      ]
+    },
+    download: "",
+    miniature: ""
+  }
+}
+```
+
+### /files/:id DELETE
+
+Примет в :id число
+
+Удалит предмет из базы и с диска с таким id
+
+В случае успеха вернет 200 и
+
+```json
+{
+  "statusCode": 200,
+  "file": {
+    id: 1,
+    name: "",
+    tags: [
+      count: 3,
+      data: [
+        {
+          "id": 1,
+          "name": "",
+          "color": "#0077ffff"
+        },
+        ...
+      ]
+    ],
+    size: 10000
+  }
+}
+```
+
+### /tags POST
+
+Создать тэг
+
+Примет в Body :
+
+```json
+{
+  "name": "",
+  "color": "#0077ffff"
+}
+```
+
+В случае успеха вернет 201 и :
+
+```json
+{
+  "id": 1,
+  "name": "",
+  "color": "#0077ffff"
+}
+```
+
+### /tags/:id DELETE
+
+Примет в :id целое число
+
+Удалит tag с таким id
+
+В случае успеха вернет 200 и :
+
+```json
+{
+  statusCode: 200,
+  tag: {
+    id: 1,
+    name: "",
+    color: ""
+  }
+}
+```
+
+### /users/verify POST
+
+Проверит подлинности токена
+
+В Body примет :
+
+```json
+{
+  "jwtToken": ""
+}
+```
+
+В случае успеха вернет 200 и :
+
+```json
+{
+  "statusCode": 200,
+  "payload": {
+    "id": 1,
+    "name": "root",
+    "isRoot": true
+  }
+}
+```
+
+### /users/login
+
+Выдаст jwt-Токен
+
+В Body примет :
+
+```json
+{
+  "userName": "",
+  "password": ""
+}
+```
+
+В случае успеха вернет 200 и :
+
+```json
+{
+  "statusCode": 200,
+  "jwtToken": ""
+}
+```
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Бесплатно
