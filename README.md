@@ -75,7 +75,7 @@
     "sort": {
       "page": 1,
       "size": 20,
-      "order": {
+      "orderBy": {
         "id": "asc"
       },
       "tags": {
@@ -228,22 +228,40 @@ tags это массив id тэгов
 }
 ```
 
+### /tags GET
+
+Пример в query : page, size, orderBy
+
+вернет объект типа :
+
+```json
+  {
+    "statusCode": 200,
+    "tags": {
+      "count": 3,
+      "data": [
+        {
+          "id": 1,
+          "name": "",
+          "color": "#0077ffff"
+        },
+        ...
+      ]
+    }
+  }
+```
+
 ### /tags/:id DELETE
 
 Примет в :id целое число
 
 Удалит tag с таким id
 
-В случае успеха вернет 200 и :
+В случае успеха вернет 204 и :
 
 ```json
 {
-  "statusCode": 200,
-  "tag": {
-    "id": 1,
-    "name": "",
-    "color": ""
-  }
+  "statusCode": 204
 }
 ```
 
